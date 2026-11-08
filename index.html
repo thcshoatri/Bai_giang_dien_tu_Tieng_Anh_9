@@ -143,6 +143,9 @@ body.editing .backup{display:block}
 .wcard{position:relative}
 .wcard .spk{position:absolute;top:12px;right:14px;font-size:1.4rem;opacity:.75}
 .wcard:active{transform:scale(.98)}
+.say{cursor:pointer;border-radius:6px;padding:0 2px}
+.say::after{content:" 🔊";font-size:.65em;opacity:.8}
+.say:hover{background:rgba(255,255,255,.12)}
 .focus{margin:10px 0 0;color:var(--chalk);font-size:.95rem;line-height:1.45}
 .focus b{color:var(--yellow);font-weight:600}
 .practice{margin:0 16px 20px;padding:16px 18px;border-radius:14px;background:color-mix(in srgb,var(--c) 10%,var(--bg));display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
@@ -533,10 +536,10 @@ const SLIDES={
 {h:"Community helpers",sub:"Bấm vào thẻ để xem nghĩa",words:[["police officer","/pəˈliːs ˌɒfɪsə/","công an, cảnh sát","👮"],["firefighter","/ˈfaɪəfaɪtə/","lính cứu hỏa","🧑‍🚒"],["electrician","/ɪˌelekˈtrɪʃn/","thợ điện","💡"],["garbage collector","/ˈɡɑːbɪdʒ kəˌlektə/","người thu gom rác","🗑️"],["delivery person","/dɪˈlɪvəri ˌpɜːsn/","người giao hàng","📦"]]},
 {h:"Local products & places",sub:"Bấm vào thẻ để xem nghĩa",words:[["artisan","/ˌɑːtɪˈzæn/","thợ thủ công","🧑‍🎨"],["handicraft","/ˈhændikrɑːft/","đồ thủ công","🧺"],["pottery","/ˈpɒtəri/","đồ gốm","🏺"],["speciality food","/ˌspeʃiˈæləti fuːd/","món đặc sản","🍢"],["tourist attraction","/ˈtʊərɪst əˌtrækʃn/","điểm thu hút khách du lịch","🏯"]]},
 {h:"Practice: Fill in the blanks",qa:[["My uncle is an ______. He repairs lights and fans.","electrician"],["Nem nướng is a famous ______ of Ninh Hoa.","speciality food"],["______ in my village make beautiful baskets by hand.","Artisans"],["Po Nagar Cham Towers are a popular ______ in Nha Trang.","tourist attraction"],["A ______ takes away our rubbish every evening.","garbage collector"]]},
-{h:"Pronunciation: /æ/, /ɑː/, /e/",items:["<b>/æ/</b>: miệng mở rộng, âm ngắn. c<u>a</u>t, h<u>a</u>nd, l<u>a</u>mp","<b>/ɑː/</b>: miệng mở to, âm dài. f<u>a</u>ther, p<u>ar</u>k, <u>ar</u>t","<b>/e/</b>: miệng mở vừa, âm ngắn. b<u>e</u>d, g<u>e</u>t, h<u>e</u>lp"]},
-{h:"Which sound?",sub:"/æ/, /ɑː/ hay /e/?",qa:[["m<u>a</u>p","/æ/"],["g<u>ar</u>den","/ɑː/"],["w<u>e</u>st","/e/"],["b<u>a</u>g","/æ/"],["c<u>ar</u>","/ɑː/"],["p<u>e</u>n","/e/"]]},
+{h:"Pronunciation: /æ/, /ɑː/, /e/",sub:"Bấm vào từ để nghe phát âm",items:["<b>/æ/</b>: miệng mở rộng, âm ngắn. <span class=\"say\">c<u>a</u>t</span>, <span class=\"say\">h<u>a</u>nd</span>, <span class=\"say\">l<u>a</u>mp</span>","<b>/ɑː/</b>: miệng mở to, âm dài. <span class=\"say\">f<u>a</u>ther</span>, <span class=\"say\">p<u>ar</u>k</span>, <span class=\"say\"><u>ar</u>t</span>","<b>/e/</b>: miệng mở vừa, âm ngắn. <span class=\"say\">b<u>e</u>d</span>, <span class=\"say\">g<u>e</u>t</span>, <span class=\"say\">h<u>e</u>lp</span>"]},
+{h:"Which sound?",sub:"/æ/, /ɑː/ hay /e/? Bấm 🔊 để nghe, bấm vào dòng để xem đáp án",qa:[["<span class=\"say\">m<u>a</u>p</span>","/æ/"],["<span class=\"say\">g<u>ar</u>den</span>","/ɑː/"],["<span class=\"say\">w<u>e</u>st</span>","/e/"],["<span class=\"say\">b<u>a</u>g</span>","/æ/"],["<span class=\"say\">c<u>ar</u></span>","/ɑː/"],["<span class=\"say\">p<u>e</u>n</span>","/e/"]]},
 {h:"Listen and repeat",items:["Bài 4 trang 10: nghe và đánh số các từ, sau đó nghe lại và nhắc theo.","Bài 5 trang 10: nghe và luyện đọc câu, phân loại các từ in đậm theo âm /æ/, /ɑː/, /e/."],audio:[[2,"Bài 4: Listen and number the words"],[3,"Bài 5: Listen and practise the sentences"]]},
-{h:"Say it quickly!",sub:"Read aloud",items:["Ann’s black cat sat on Dad’s hat. (/æ/)","Mark parked his car in the dark yard. (/ɑː/)","Ted said the red pen is on the desk. (/e/)"]},
+{h:"Say it quickly!",sub:"Bấm 🔊 để nghe mẫu, rồi đọc theo",items:["<span class=\"say\">Ann’s black cat sat on Dad’s hat.</span> (/æ/)","<span class=\"say\">Mark parked his car in the dark yard.</span> (/ɑː/)","<span class=\"say\">Ted said the red pen is on the desk.</span> (/e/)"]},
 {h:"Homework",items:["Học thuộc từ vựng về community helpers và handicrafts.","Tìm thêm 3 từ có âm /æ/, 3 từ có âm /ɑː/, 3 từ có âm /e/.","Làm bài tập trang 10 SGK."]}
 ],
 "unit-1:2":[
@@ -611,6 +614,11 @@ function renderSlide(){
     if(el.tagName==="LI")el.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();el.classList.toggle("on")}});
   });
   st.querySelectorAll(".reveal").forEach(b=>b.addEventListener("click",()=>st.querySelectorAll(b.dataset.all==="w"?".wcard":".qa li").forEach(el=>el.classList.add("on"))));
+  st.querySelectorAll(".say").forEach(el=>{
+    el.tabIndex=0;el.setAttribute("role","button");el.title="Nghe phát âm";
+    el.addEventListener("click",e=>{e.stopPropagation();speak(el.textContent)});
+    el.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();e.stopPropagation();speak(el.textContent)}});
+  });
   $("#dkCount").textContent=(dk.n+1)+" / "+dk.list.length;
   wireAudio(st);
   $("#dkPrev").disabled=dk.n===0;
