@@ -132,6 +132,13 @@ body.editing .backup{display:block}
 .dk-nav{display:flex;justify-content:space-between;padding:12px clamp(16px,4vw,40px);padding-bottom:calc(12px + env(safe-area-inset-bottom,0px))}
 .dk-nav button{background:rgba(255,255,255,.12);color:var(--chalk);border:0;border-radius:12px;padding:12px 22px;font-size:1.1rem;cursor:pointer}
 .dk-nav button:disabled{opacity:.35;cursor:default}
+.aud{background:rgba(0,0,0,.22);border-radius:12px;padding:12px 16px;margin:14px 0;display:grid;gap:8px;max-width:760px}
+.aud .al{font-weight:600;font-size:clamp(1.05rem,2vw,1.3rem);color:var(--yellow)}
+.aud audio{width:100%}
+.aud .ar{display:flex;gap:12px;flex-wrap:wrap;align-items:center;color:var(--chalk-dim);font-size:.95rem}
+.aud label{background:rgba(255,255,255,.14);padding:6px 12px;border-radius:8px;cursor:pointer;color:var(--chalk);position:relative}
+.aud label:focus-within{outline:3px solid var(--yellow)}
+.aud input{position:absolute;opacity:0;width:1px;height:1px;overflow:hidden}
 .focus{margin:10px 0 0;color:var(--chalk);font-size:.95rem;line-height:1.45}
 .focus b{color:var(--yellow);font-weight:600}
 .practice{margin:0 16px 20px;padding:16px 18px;border-radius:14px;background:color-mix(in srgb,var(--c) 10%,var(--bg));display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
@@ -511,7 +518,7 @@ const SLIDES={
 {h:"Warm-up: Guess the place",sub:"Where do you do these things?",qa:[["You borrow books here.","library"],["You buy fresh fish and vegetables here.","market"],["You see a doctor here.","hospital / clinic"],["You can watch a new film here.","cinema"]]},
 {h:"Mục tiêu bài học",items:["Làm quen chủ đề Local Community","Biết và dùng từ: suburb, neighbourhood, facilities, community, get on with, remind sb of","Nói về khu phố nơi em sống"]},
 {h:"New words",sub:"Bấm vào thẻ để xem nghĩa",words:[["suburb","/ˈsʌbɜːb/","ngoại ô","🏡"],["neighbourhood","/ˈneɪbəhʊd/","khu phố, láng giềng","🏘️"],["facilities","/fəˈsɪlətiz/","cơ sở vật chất, tiện ích","🏟️"],["community","/kəˈmjuːnəti/","cộng đồng","👨‍👩‍👧"],["get on with","/ɡet ˈɒn wɪð/","hòa hợp với","🤝"],["remind sb of","/rɪˈmaɪnd … əv/","gợi cho ai nhớ đến","💭"]]},
-{h:"Listen and read",items:["Mở SGK trang 8, nghe bài hội thoại và đọc theo.","Gạch chân các tiện ích (facilities) được nhắc đến trong bài.","Làm bài 2 và 3 trang 9, đối chiếu đáp án với bạn bên cạnh."]},
+{h:"Listen and read",audio:[[1,"Bài 1: Listen and read"]],items:["Mở SGK trang 8, nghe bài hội thoại và đọc theo.","Gạch chân các tiện ích (facilities) được nhắc đến trong bài.","Làm bài 2 và 3 trang 9, đối chiếu đáp án với bạn bên cạnh."]},
 {h:"Practice: Complete the sentences",sub:"Bấm vào từng câu để xem đáp án",qa:[["My family moved to a quiet ______ outside the city.","suburb"],["Our new neighbourhood has good ______ like a park and a library.","facilities"],["I ______ my neighbours very well. We often help each other.","get on with"],["This old house ______ me ______ my grandparents’ home.","reminds … of"]]},
 {h:"Talk about your neighbourhood",sub:"Work in pairs",items:["What facilities are there in your neighbourhood?","Which one do you use most? Why?","What would you like to have more in your area?"]},
 {h:"Homework",items:["Học thuộc từ mới, đặt mỗi từ một câu.","Làm lại bài tập trang 9.","Chuẩn bị A Closer Look 1: kể tên 5 người phục vụ cộng đồng (community helpers)."]}
@@ -524,6 +531,7 @@ const SLIDES={
 {h:"Practice: Fill in the blanks",qa:[["My uncle is an ______. He repairs lights and fans.","electrician"],["Nem nướng is a famous ______ of Ninh Hoa.","speciality food"],["______ in my village make beautiful baskets by hand.","Artisans"],["Po Nagar Cham Towers are a popular ______ in Nha Trang.","tourist attraction"],["A ______ takes away our rubbish every evening.","garbage collector"]]},
 {h:"Pronunciation: /æ/, /ɑː/, /e/",items:["<b>/æ/</b>: miệng mở rộng, âm ngắn. c<u>a</u>t, h<u>a</u>nd, l<u>a</u>mp","<b>/ɑː/</b>: miệng mở to, âm dài. f<u>a</u>ther, p<u>ar</u>k, <u>ar</u>t","<b>/e/</b>: miệng mở vừa, âm ngắn. b<u>e</u>d, g<u>e</u>t, h<u>e</u>lp"]},
 {h:"Which sound?",sub:"/æ/, /ɑː/ hay /e/?",qa:[["m<u>a</u>p","/æ/"],["g<u>ar</u>den","/ɑː/"],["w<u>e</u>st","/e/"],["b<u>a</u>g","/æ/"],["c<u>ar</u>","/ɑː/"],["p<u>e</u>n","/e/"]]},
+{h:"Listen and repeat",items:["Bài 4 trang 10: nghe và đánh số các từ, sau đó nghe lại và nhắc theo.","Bài 5 trang 10: nghe và luyện đọc câu, phân loại các từ in đậm theo âm /æ/, /ɑː/, /e/."],audio:[[2,"Bài 4: Listen and number the words"],[3,"Bài 5: Listen and practise the sentences"]]},
 {h:"Say it quickly!",sub:"Read aloud",items:["Ann’s black cat sat on Dad’s hat. (/æ/)","Mark parked his car in the dark yard. (/ɑː/)","Ted said the red pen is on the desk. (/e/)"]},
 {h:"Homework",items:["Học thuộc từ vựng về community helpers và handicrafts.","Tìm thêm 3 từ có âm /æ/, 3 từ có âm /ɑː/, 3 từ có âm /e/.","Làm bài tập trang 10 SGK."]}
 ],
@@ -540,9 +548,11 @@ const SLIDES={
 "unit-1:3":[
 {big:1,h:T1,sub:"Communication"},
 {h:"Warm-up: Places of interest in Khanh Hoa",sub:"Can you name these places?",qa:[["A long beach with white sand in Ninh Hoa.","Doc Let Beach"],["Ancient Cham towers on a hill in Nha Trang.","Po Nagar Cham Towers"],["A group of big rocks by the sea in Nha Trang.","Hon Chong"]]},
+{h:"Listen and read the conversations",items:["Bài 1 trang 12: nghe và đọc hai đoạn hội thoại.","Chú ý cách nhờ giúp đỡ và cách đáp lại."],audio:[[4,"Bài 1: Listen and read the conversations"]]},
 {h:"Everyday English: Seeking help",items:["<b>Asking:</b> Could you help me…? / Can you give me a hand with…? / Would you mind + V-ing…?","<b>Saying yes:</b> Sure. / No problem. / Of course. / Not at all. (đáp lại Would you mind…?)","<b>Saying no:</b> I’m sorry, I can’t. I’m busy right now. / I’m afraid I can’t."]},
 {h:"Practice: How do you respond?",qa:[["Would you mind opening the window?","Not at all."],["Can you give me a hand with these books?","Sure. Where do you want them?"],["Could you help me with my maths homework?","I’m sorry, I can’t. I’m busy right now."]]},
 {h:"Role-play",sub:"Work in pairs. Ask for help and respond.",items:["You want your friend to lend you a pen.","You need help to carry chairs for the class meeting.","You are lost and ask a stranger the way to the market."]},
+{h:"Listen: Places of interest",items:["Bài 4 trang 13: nghe hai bạn nói về địa điểm yêu thích.","Điền vào bảng, không quá hai từ và / hoặc một con số."],audio:[[5,"Bài 4: Listen and fill in the table"]]},
 {h:"Your favourite place of interest",sub:"Ask and answer",items:["What is your favourite place of interest?","Where is it? How far is it from your house?","How often do you go there?","What do you do there?"]},
 {h:"Homework",items:["Viết 2 đoạn hội thoại ngắn nhờ giúp đỡ và đáp lại.","Chuẩn bị 3–4 câu giới thiệu một địa điểm yêu thích ở Khánh Hòa."]}
 ],
@@ -559,7 +569,7 @@ const SLIDES={
 "unit-1:5":[
 {big:1,h:T1,sub:"Skills 2: Listening & Writing"},
 {h:"Warm-up: Why are they important?",sub:"Discuss in pairs",items:["Which community helpers do you see every day?","What would happen if there were no garbage collectors for a week?","Which helper do you admire most? Why?"]},
-{h:"Listening",items:["Trước khi nghe: nhìn tranh SGK trang 15, đoán người được nhắc đến làm nghề gì.","Nghe lần 1: điền vào chỗ trống, không quá hai từ (bài 2).","Nghe lần 2: chọn True / False (bài 3).","Đối chiếu đáp án, nghe lại đoạn còn sai."]},
+{h:"Listening",audio:[[6,"Bài 2: Listen and fill in each blank"],[7,"Bài 3: Listen again and tick T / F"]],items:["Trước khi nghe: nhìn tranh SGK trang 15, đoán người được nhắc đến làm nghề gì.","Nghe lần 1: điền vào chỗ trống, không quá hai từ (bài 2).","Nghe lần 2: chọn True / False (bài 3).","Đối chiếu đáp án, nghe lại đoạn còn sai."]},
 {h:"Writing: Paragraph outline",items:["<b>Topic sentence:</b> My favourite community helper is…","<b>Supporting ideas:</b> What does he / she do? What is he / she like? Why is the job important?","<b>Concluding sentence:</b> I admire / respect him / her because…"]},
 {h:"Useful language",items:["He / She is responsible for + V-ing…","He / She works hard / gets up early / never complains.","His / Her job helps our community…","Without him / her, our neighbourhood would…"]},
 {h:"Sample paragraph",text:"My favourite community helper is Mrs Lan, a garbage collector in my neighbourhood. She is responsible for collecting rubbish from every house in the evening. She starts work when most people are having dinner, and she often finishes late at night. Although her job is hard and dirty, she is always friendly and smiles at everyone. Thanks to her, our streets are clean every morning. I really respect Mrs Lan because she works hard to make our community a better place to live."},
@@ -588,6 +598,7 @@ function renderSlide(){
   if(s.text)h+=`<p class="stext">${s.text}</p>`;
   if(s.words)h+=`<div class="words">${s.words.map(w=>`<button class="wcard"><span class="em" aria-hidden="true">${w[3]}</span><span class="w">${w[0]}</span><span class="ipa">${w[1]}</span><span class="m">${w[2]}</span></button>`).join("")}</div><button class="reveal" data-all="w">Hiện tất cả nghĩa</button>`;
   if(s.items)h+=`<ul>${s.items.map(x=>`<li>${x}</li>`).join("")}</ul>`;
+  if(s.audio)h+=s.audio.map(a=>`<div class="aud" data-n="${a[0]}"><div class="al">🎧 Track ${a[0]}: ${a[1]}</div><audio controls preload="metadata"></audio><div class="ar"><label>Chọn file trên máy<input type="file" accept="audio/*"></label><span class="am"></span></div></div>`).join("");
   if(s.qa)h+=`<ol class="qa">${s.qa.map(x=>`<li tabindex="0">${x[0]}<div class="ans">→ ${x[1]}</div></li>`).join("")}</ol><button class="reveal" data-all="q">Hiện đáp án</button>`;
   if(s.note)h+=`<p class="snote">${s.note}</p>`;
   st.innerHTML=h+"</div>";st.scrollTop=0;
@@ -597,6 +608,7 @@ function renderSlide(){
   });
   st.querySelectorAll(".reveal").forEach(b=>b.addEventListener("click",()=>st.querySelectorAll(b.dataset.all==="w"?".wcard":".qa li").forEach(el=>el.classList.add("on"))));
   $("#dkCount").textContent=(dk.n+1)+" / "+dk.list.length;
+  wireAudio(st);
   $("#dkPrev").disabled=dk.n===0;
   $("#dkNext").textContent=dk.n===dk.list.length-1?"Kết thúc":"Tiếp ›";
 }
@@ -604,7 +616,29 @@ function step(d){const n=dk.n+d;if(n<0)return;if(n>=dk.list.length){$("#deck").c
 $("#dkPrev").addEventListener("click",()=>step(-1));
 $("#dkNext").addEventListener("click",()=>step(1));
 $("#dkClose").addEventListener("click",()=>$("#deck").close());
+$("#deck").addEventListener("close",()=>$("#dkStage").querySelectorAll("audio").forEach(a=>a.pause()));
+
+/* ===== File nghe ===== */
+function idb(){return new Promise((res,rej)=>{const r=indexedDB.open("ta9-audio",1);r.onupgradeneeded=()=>r.result.createObjectStore("f");r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}
+async function audGet(k){try{const db=await idb();return await new Promise(r=>{const q=db.transaction("f").objectStore("f").get(k);q.onsuccess=()=>r(q.result||null);q.onerror=()=>r(null)})}catch(e){return null}}
+async function audSet(k,v){try{const db=await idb();await new Promise((r,j)=>{const t=db.transaction("f","readwrite");t.objectStore("f").put(v,k);t.oncomplete=r;t.onerror=()=>j(t.error)});return true}catch(e){return false}}
+const pad=n=>String(n).padStart(2,"0");
+let audURLs=[];
+function wireAudio(st){
+  audURLs.forEach(u=>URL.revokeObjectURL(u));audURLs=[];
+  st.querySelectorAll(".aud").forEach(async box=>{
+    const n=+box.dataset.n,au=box.querySelector("audio"),msg=box.querySelector(".am"),inp=box.querySelector("input");
+    const useBlob=b=>{const u=URL.createObjectURL(b);audURLs.push(u);au.src=u;msg.textContent="Đang dùng file đã chọn trên máy này"};
+    inp.addEventListener("change",async()=>{const f=inp.files[0];if(!f)return;useBlob(f);const ok=await audSet("track-"+n,f);toast(ok?"Đã lưu file nghe Track "+n+" trên máy này":"Đã mở file, nhưng trình duyệt không cho lưu lại")});
+    const saved=await audGet("track-"+n);
+    if(saved){useBlob(saved);return}
+    au.addEventListener("error",()=>{if(!au.src.startsWith("blob:"))msg.textContent="Chưa tìm thấy file audio/"+pad(n)+".mp3. Bấm “Chọn file trên máy” để thêm."},{once:true});
+    au.addEventListener("loadedmetadata",()=>{if(!au.src.startsWith("blob:"))msg.textContent="File audio/"+pad(n)+".mp3"},{once:true});
+    au.src="audio/"+pad(n)+".mp3";msg.textContent="Đang tìm file audio/"+pad(n)+".mp3…";
+  });
+}
 $("#deck").addEventListener("keydown",e=>{
+  if(e.target.tagName==="AUDIO")return;
   if(e.key==="ArrowRight"||e.key==="PageDown"){e.preventDefault();step(1)}
   else if(e.key==="ArrowLeft"||e.key==="PageUp"){e.preventDefault();step(-1)}
 });
