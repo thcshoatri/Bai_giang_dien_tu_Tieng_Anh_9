@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bài giảng điện tử Tiếng Anh 9</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Be+Vietnam+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F3F6F4; --surface:#FFFFFF; --ink:#16231D; --muted:#55665E; --line:#D5DED9;
+  --board:#1E4A38; --board-2:#173B2C; --chalk:#F5F3E8; --chalk-dim:#B9C8BF;
+  --yellow:#F2C94C; --sky:#5AA9D6; --coral:#E8735A; --focus:#2F7DD1;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#101814; --surface:#18231E; --ink:#E9EFEB; --muted:#9DB0A6; --line:#2C3A33;
+    --board:#1A4232; --board-2:#123024; --focus:#7DB6F0; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#101814; --surface:#18231E; --ink:#E9EFEB; --muted:#9DB0A6; --line:#2C3A33;
+  --board:#1A4232; --board-2:#123024; --focus:#7DB6F0; color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1.0625rem/1.55 "Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+button,input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:6px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 clamp(16px,4vw,40px)}
+
+/* Board hero */
+.board{background:var(--board);color:var(--chalk);border-bottom:10px solid #8A5A34;position:relative;overflow:hidden}
+.board::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse at 20% 30%,rgba(255,255,255,.06),transparent 60%),radial-gradient(ellipse at 80% 70%,rgba(255,255,255,.04),transparent 55%)}
+.board .wrap{position:relative;z-index:1;padding-top:clamp(28px,5vw,56px);padding-bottom:clamp(28px,5vw,48px);display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end}
+.date{font-family:"Baloo 2",cursive,sans-serif;color:var(--chalk-dim);font-size:1.15rem;margin:0 0 4px}
+h1{font-family:"Baloo 2",cursive,sans-serif;font-weight:800;font-size:clamp(3rem,9vw,6.5rem);line-height:.95;margin:0;letter-spacing:-.01em;text-shadow:0 0 1px rgba(245,243,232,.6)}
+.sub{font-size:clamp(1.05rem,2vw,1.3rem);margin:12px 0 0;color:var(--chalk)}
+.sub span{color:var(--yellow);font-weight:600}
+.teacher{display:grid;gap:6px;text-align:right;font-size:1rem;color:var(--chalk-dim);min-width:220px}
+.teacher [contenteditable]{color:var(--chalk);font-weight:600;padding:2px 6px;border-radius:6px;outline-offset:2px}
+.teacher [contenteditable]:empty::before{content:attr(data-ph);color:var(--chalk-dim);font-weight:400}
+body.editing .teacher [contenteditable]{background:rgba(255,255,255,.08);box-shadow:inset 0 -2px 0 var(--yellow)}
+
+/* Toolbar */
+.bar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;padding-top:24px;padding-bottom:8px}
+.sem{display:inline-flex;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:4px}
+.sem button{border:0;background:none;padding:8px 18px;border-radius:999px;cursor:pointer;font-weight:600;color:var(--muted)}
+.sem button[aria-selected="true"]{background:var(--board);color:var(--chalk)}
+.tools{display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:var(--surface);padding:8px 14px;border-radius:10px;cursor:pointer;font-weight:500}
+.btn:hover{border-color:var(--muted)}
+.btn.on{background:var(--yellow);border-color:var(--yellow);color:#2A2210}
+
+/* Units */
+.units{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;padding:16px 0 48px}
+.unit{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:start;text-align:left;cursor:pointer;
+  background:var(--surface);border:1px solid var(--line);border-left:8px solid var(--c);border-radius:6px 14px 14px 6px;padding:16px 18px}
+.unit:hover{border-color:var(--c)}
+.unit .num{grid-row:span 3;font-family:"Baloo 2",cursive,sans-serif;font-weight:800;font-size:2.6rem;line-height:1;color:var(--c);min-width:1.4em}
+.unit .tt{font-family:"Baloo 2",cursive,sans-serif;font-weight:700;font-size:1.3rem;line-height:1.15}
+.unit .vi{color:var(--muted);font-size:.95rem}
+.unit .prog{font-size:.85rem;color:var(--muted);margin-top:6px}
+.unit.review{--c:var(--muted);border-left-style:dashed}
+
+/* Lesson panel */
+dialog{border:0;padding:0;width:min(760px,calc(100% - 24px));max-height:calc(100% - 24px);border-radius:18px;background:var(--surface);color:var(--ink);box-shadow:0 20px 60px rgba(0,0,0,.35)}
+dialog::backdrop{background:rgba(10,20,15,.55)}
+.ph{background:var(--board);color:var(--chalk);padding:22px 24px 18px;position:relative}
+.ph .k{font-family:"Baloo 2",cursive,sans-serif;color:var(--yellow);font-size:1.1rem;margin:0}
+.ph h2{font-family:"Baloo 2",cursive,sans-serif;font-weight:800;font-size:clamp(1.8rem,5vw,2.6rem);line-height:1.05;margin:2px 0 4px}
+.ph p{margin:0;color:var(--chalk-dim)}
+.x{position:absolute;top:14px;right:14px;width:40px;height:40px;border-radius:50%;border:0;background:rgba(255,255,255,.12);color:var(--chalk);font-size:1.4rem;cursor:pointer}
+ol.lessons{list-style:none;margin:0;padding:10px 16px 20px;counter-reset:l}
+.lesson{display:grid;grid-template-columns:auto 1fr auto;gap:4px 14px;align-items:center;padding:12px 8px;border-bottom:1px solid var(--line)}
+.lesson:last-child{border-bottom:0}
+.lesson .n{counter-increment:l;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-weight:700;background:color-mix(in srgb,var(--c) 18%,transparent);color:var(--ink)}
+.lesson .n::before{content:counter(l)}
+.lesson .name{font-weight:600;font-size:1.1rem}
+.lesson .name small{display:block;font-weight:400;color:var(--muted);font-size:.9rem}
+.open{border:0;background:var(--c);color:#fff;padding:9px 16px;border-radius:10px;font-weight:600;cursor:pointer;text-decoration:none;white-space:nowrap}
+.open[aria-disabled="true"]{background:var(--line);color:var(--muted);cursor:not-allowed}
+.lesson input{grid-column:2 / -1;width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);display:none}
+body.editing .lesson input{display:block}
+
+.backup{display:none;padding:0 0 40px}
+body.editing .backup{display:block}
+.backup textarea{width:100%;min-height:110px;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-size:.85rem}
+.backup p{color:var(--muted);margin:6px 0 10px}
+.hint{color:var(--muted);font-size:.95rem;margin:0}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.show{opacity:1}
+
+.focus{margin:10px 0 0;color:var(--chalk);font-size:.95rem;line-height:1.45}
+.focus b{color:var(--yellow);font-weight:600}
+.practice{margin:0 16px 20px;padding:16px 18px;border-radius:14px;background:color-mix(in srgb,var(--c) 10%,var(--bg));display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+.practice p{margin:0;color:var(--muted);font-size:.95rem;max-width:42ch}
+.practice .open{font-size:1.05rem;padding:11px 20px}
+.quiz{padding:20px 22px 24px}
+.qhead{display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:.95rem}
+.qtag{background:color-mix(in srgb,var(--c) 18%,transparent);color:var(--ink);padding:2px 10px;border-radius:999px;font-weight:600}
+.qtext{font-size:clamp(1.25rem,3.2vw,1.6rem);font-weight:600;line-height:1.4;margin:16px 0 18px}
+.qopts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.qopt{text-align:left;font-size:clamp(1.05rem,2.6vw,1.25rem);padding:14px 16px;border-radius:12px;border:2px solid var(--line);background:var(--surface);cursor:pointer;display:flex;gap:12px;align-items:baseline}
+.qopt b{color:var(--c);font-family:"Baloo 2",cursive,sans-serif;font-size:1.2em}
+.qopt:hover:not(:disabled){border-color:var(--c)}
+.qopt:disabled{cursor:default}
+.qopt.right{border-color:#2E9E5B;background:color-mix(in srgb,#2E9E5B 16%,var(--surface))}
+.qopt.wrong{border-color:#D2553F;background:color-mix(in srgb,#D2553F 14%,var(--surface))}
+.qex{margin:16px 0 0;padding:12px 14px;border-radius:10px;background:var(--bg);font-size:1.02rem}
+.qnav{display:flex;justify-content:space-between;gap:10px;margin-top:18px;flex-wrap:wrap}
+.qend{text-align:center;padding:10px 0}
+.qbig{font-family:"Baloo 2",cursive,sans-serif;font-weight:800;font-size:4.5rem;line-height:1;margin:10px 0;color:var(--c)}
+.qend .qnav{justify-content:center}
+@media (max-width:640px){.qopts{grid-template-columns:1fr}}
+@media (max-width:640px){
+  .board .wrap{grid-template-columns:1fr}
+  .teacher{text-align:left}
+  .lesson{grid-template-columns:auto 1fr}
+  .lesson .open{grid-column:2;justify-self:start}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="board">
+  <div class="wrap">
+    <div>
+      <p class="date" id="today"></p>
+      <h1>Tiếng Anh 9</h1>
+      <p class="sub">Bài giảng điện tử theo sách <span>Global Success</span></p>
+    </div>
+    <div class="teacher">
+      <div>Giáo viên: <span contenteditable="false" data-key="teacher" data-ph="(nhập tên)"></span></div>
+      <div>Trường: <span contenteditable="false" data-key="school" data-ph="(nhập tên trường)"></span></div>
+      <div>Năm học: <span contenteditable="false" data-key="year" data-ph="2026 – 2027"></span></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="bar">
+    <div class="sem" role="tablist" aria-label="Học kỳ">
+      <button role="tab" aria-selected="true" data-sem="1">Học kỳ I</button>
+      <button role="tab" aria-selected="false" data-sem="2">Học kỳ II</button>
+    </div>
+    <div class="tools">
+      <button class="btn" id="editBtn" aria-pressed="false">Gắn liên kết bài giảng</button>
+      <button class="btn" id="fsBtn">Toàn màn hình</button>
+    </div>
+  </div>
+  <p class="hint" id="hint">Bấm vào một Unit để mở danh sách tiết dạy.</p>
+
+  <section class="units" id="units" aria-live="polite"></section>
+
+  <section class="backup" aria-label="Sao lưu liên kết">
+    <p>Sao lưu: chép đoạn mã dưới đây sang máy khác, dán vào ô rồi bấm “Khôi phục” để dùng lại toàn bộ liên kết.</p>
+    <textarea id="backupBox" spellcheck="false"></textarea>
+    <div class="tools" style="margin-top:10px">
+      <button class="btn" id="copyBtn">Sao chép mã</button>
+      <button class="btn" id="restoreBtn">Khôi phục</button>
+    </div>
+  </section>
+</main>
+
+<dialog id="panel" aria-labelledby="pTitle">
+  <div class="ph">
+    <p class="k" id="pKicker"></p>
+    <h2 id="pTitle"></h2>
+    <p id="pVi"></p>
+    <p class="focus" id="pFocus"></p>
+    <button class="x" id="closeBtn" aria-label="Đóng">×</button>
+  </div>
+  <ol class="lessons" id="lessons"></ol>
+  <div class="practice" id="practice">
+    <p>Bài tập củng cố bám sát từ vựng, ngữ âm, ngữ pháp và Everyday English của bài. Đáp án được xáo trộn mỗi lần làm.</p>
+    <button class="open" id="startQuiz">Làm bài luyện tập</button>
+  </div>
+  <div class="quiz" id="quiz" hidden></div>
+</dialog>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+const COLORS=["#2E8B57","#3B7DD8","#E08A1E","#8E5BC7","#D2553F","#C0392B","#1E9AA6","#3C8D2F","#5B6CD6","#2A8F6A","#B5468A","#7A6A2F"];
+const LESSONS=[
+  ["Getting Started","Khởi động – hội thoại mở đầu"],
+  ["A Closer Look 1","Từ vựng & Phát âm"],
+  ["A Closer Look 2","Ngữ pháp"],
+  ["Communication","Giao tiếp & Văn hoá"],
+  ["Skills 1","Đọc & Nói"],
+  ["Skills 2","Nghe & Viết"],
+  ["Looking Back & Project","Ôn tập & Dự án"]
+];
+const REVIEW_LESSONS=[["Language","Ôn tập ngôn ngữ"],["Skills","Ôn tập kỹ năng"]];
+const ITEMS=[
+  {id:"unit-1",n:"1",t:"Local Community",vi:"Cộng đồng địa phương",s:1},
+  {id:"unit-2",n:"2",t:"City Life",vi:"Cuộc sống thành phố",s:1},
+  {id:"unit-3",n:"3",t:"Healthy Living for Teens",vi:"Lối sống lành mạnh cho tuổi teen",s:1},
+  {id:"review-1",n:"R1",t:"Review 1",vi:"Ôn tập Unit 1 – 3",s:1,r:1},
+  {id:"unit-4",n:"4",t:"Remembering the Past",vi:"Nhớ về quá khứ",s:1},
+  {id:"unit-5",n:"5",t:"Our Experiences",vi:"Những trải nghiệm của chúng ta",s:1},
+  {id:"unit-6",n:"6",t:"Vietnamese Lifestyle: Then and Now",vi:"Lối sống Việt Nam xưa và nay",s:1},
+  {id:"review-2",n:"R2",t:"Review 2",vi:"Ôn tập Unit 4 – 6",s:1,r:1},
+  {id:"unit-7",n:"7",t:"Natural Wonders of the World",vi:"Kỳ quan thiên nhiên thế giới",s:2},
+  {id:"unit-8",n:"8",t:"Tourism",vi:"Du lịch",s:2},
+  {id:"unit-9",n:"9",t:"World Englishes",vi:"Tiếng Anh trên thế giới",s:2},
+  {id:"review-3",n:"R3",t:"Review 3",vi:"Ôn tập Unit 7 – 9",s:2,r:1},
+  {id:"unit-10",n:"10",t:"Planet Earth",vi:"Hành tinh Trái Đất",s:2},
+  {id:"unit-11",n:"11",t:"Electronic Devices",vi:"Thiết bị điện tử",s:2},
+  {id:"unit-12",n:"12",t:"Career Choices",vi:"Lựa chọn nghề nghiệp",s:2},
+  {id:"review-4",n:"R4",t:"Review 4",vi:"Ôn tập Unit 10 – 12",s:2,r:1}
+];
+ITEMS.filter(i=>!i.r).forEach((u,k)=>u.c=COLORS[k]);
+const PAGES={"unit-1":8,"unit-2":18,"unit-3":28,"review-1":38,"unit-4":40,"unit-5":50,"unit-6":60,"review-2":70,"unit-7":72,"unit-8":82,"unit-9":92,"review-3":102,"unit-10":104,"unit-11":114,"unit-12":124,"review-4":134};
+ITEMS.forEach(i=>i.p=PAGES[i.id]);
+
+const KEY="ta9-index-v1";
+let store={links:{},info:{}};
+try{const raw=localStorage.getItem(KEY);if(raw)store=Object.assign(store,JSON.parse(raw));}catch(e){}
+store.info=Object.assign({teacher:"Nguyễn Thị Minh Hiến",school:"THCS Bắc Ninh Hòa"},store.info||{});
+for(const k of ["teacher","school"])if(!store.info[k])store.info[k]={teacher:"Nguyễn Thị Minh Hiến",school:"THCS Bắc Ninh Hòa"}[k];
+function save(){try{localStorage.setItem(KEY,JSON.stringify(store));}catch(e){} refreshBackup();}
+
+const $=s=>document.querySelector(s);
+let sem=1,current=null;
+
+document.getElementById("today").textContent=new Date().toLocaleDateString("vi-VN",{weekday:"long",day:"numeric",month:"numeric",year:"numeric"});
+
+function lessonsOf(it){return it.r?REVIEW_LESSONS:LESSONS}
+function linkCount(it){return lessonsOf(it).filter((_,i)=>store.links[it.id+":"+i]).length}
+
+function renderUnits(){
+  const box=$("#units");box.innerHTML="";
+  ITEMS.filter(i=>i.s===sem).forEach(it=>{
+    const b=document.createElement("button");
+    b.className="unit"+(it.r?" review":"");
+    if(it.c)b.style.setProperty("--c",it.c);
+    const total=lessonsOf(it).length,got=linkCount(it);
+    b.innerHTML=`<span class="num">${it.n}</span><span class="tt">${it.r?it.t:"Unit "+it.n}</span>
+      <span class="vi">${it.r?it.vi:it.t}</span>
+      <span class="prog">${it.r?"":it.vi+"<br>"}SGK trang ${it.p}<br>${got}/${total} tiết đã gắn bài giảng</span>`;
+    b.addEventListener("click",()=>{location.hash=it.id});
+    box.appendChild(b);
+  });
+}
+
+function openPanel(it){
+  current=it;
+  const p=$("#panel");
+  p.style.setProperty("--c",it.c||"#55665E");
+  $("#pKicker").textContent=it.r?"Học kỳ "+(it.s===1?"I":"II"):"Unit "+it.n;
+  $("#pTitle").textContent=it.t;
+  $("#pVi").textContent=it.vi+" (SGK trang "+it.p+")";
+  $("#pFocus").innerHTML=focusOf(it);
+  const ol=$("#lessons");ol.innerHTML="";
+  lessonsOf(it).forEach(([en,vi],i)=>{
+    const k=it.id+":"+i,url=store.links[k]||"";
+    const li=document.createElement("li");li.className="lesson";
+    li.innerHTML=`<span class="n" aria-hidden="true"></span>
+      <span class="name">${en}<small>${vi}</small></span>
+      <a class="open" target="_blank" rel="noopener"></a>
+      <input type="url" placeholder="Dán liên kết bài giảng (Google Slides, Canva, YouTube…)" aria-label="Liên kết cho ${en}">`;
+    const a=li.querySelector(".open"),inp=li.querySelector("input");
+    const sync=()=>{const u=store.links[k];
+      if(u){a.href=u;a.textContent="Mở bài giảng";a.removeAttribute("aria-disabled")}
+      else{a.removeAttribute("href");a.textContent="Chưa có bài";a.setAttribute("aria-disabled","true")}};
+    inp.value=url;sync();
+    a.addEventListener("click",e=>{if(!store.links[k]){e.preventDefault();toast("Bấm “Gắn liên kết bài giảng” để thêm bài cho tiết này")}});
+    inp.addEventListener("change",()=>{const v=inp.value.trim();
+      if(v&&!/^https?:\/\//i.test(v)){toast("Liên kết cần bắt đầu bằng https://");return}
+      if(v)store.links[k]=v;else delete store.links[k];save();sync();renderUnits();toast(v?"Đã lưu liên kết":"Đã xoá liên kết")});
+    ol.appendChild(li);
+  });
+  showLessons();
+  if(!p.open)p.showModal();
+}
+
+/* ===== Trọng tâm & bài tập ===== */
+const FOCUS={
+"unit-1":["/æ/, /ɑː/, /e/","Question words + to-infinitive; Phrasal verbs (1)"],
+"unit-2":["/aʊ/, /əʊ/, /eə/","Double comparatives; Phrasal verbs (2)"],
+"unit-3":["/h/, /r/","Modal verbs in first conditional sentences"],
+"unit-4":["/m/, /l/","Past continuous; Wish + past simple"],
+"unit-5":["/j/, /w/","Present perfect"],
+"unit-6":["/fl/, /fr/","Verbs + to-infinitive; Verbs + V-ing"],
+"unit-7":["/sl/, /sn/","Reported speech (Yes / No questions)"],
+"unit-8":["Trọng âm từ tận cùng -ic, -ious","Relative pronouns"],
+"unit-9":["Trọng âm từ tận cùng -ion, -ity","Defining relative clauses"],
+"unit-10":["Rhythm in sentences","Non-defining relative clauses"],
+"unit-11":["Stress on all words in sentences","suggest / advise / recommend + V-ing / a clause with should"],
+"unit-12":["Intonation in statements used as questions","Adverbial clauses of concession, result, and reason"]
+};
+function focusOf(it){
+  if(it.r){const n=+it.id.split("-")[1];return "<b>Ôn tập:</b> Unit "+((n-1)*3+1)+", "+((n-1)*3+2)+", "+((n-1)*3+3)+" (Language và Skills)"}
+  const f=FOCUS[it.id];return "<b>Ngữ âm:</b> "+f[0]+"<br><b>Ngữ pháp:</b> "+f[1];
+}
+const TAGS={V:"Từ vựng",P:"Ngữ âm",G:"Ngữ pháp",E:"Giao tiếp"};
+/* Mỗi câu: [loại, câu hỏi, [đáp án đúng, nhiễu, nhiễu, nhiễu], giải thích] */
+const QUIZ={
+"unit-1":[
+["V","A ______ collects rubbish from our houses every morning.",["garbage collector","firefighter","electrician","delivery person"],"Garbage collector: người thu gom rác."],
+["V","Bat Trang village is famous for its ______, such as vases and bowls.",["pottery","conical hats","silk","lanterns"],"Pottery: đồ gốm. Bình và bát là sản phẩm gốm."],
+["V","Many ______ in my village make beautiful baskets by hand.",["artisans","tourists","customers","drivers"],"Artisan: thợ thủ công."],
+["P","Chọn từ có phần gạch chân phát âm khác:",["f<u>a</u>ther","c<u>a</u>t","h<u>a</u>nd","l<u>a</u>mp"],"Father đọc /ɑː/; các từ còn lại đọc /æ/."],
+["P","Chọn từ có phần gạch chân phát âm khác:",["p<u>a</u>rk","m<u>e</u>t","s<u>e</u>ll","t<u>e</u>n"],"Park đọc /ɑː/; các từ còn lại đọc /e/."],
+["G","I don’t know ______ to fix this bike. Can you help me?",["how","what","who","whose"],"How + to-infinitive: cách làm gì."],
+["G","Our grandparents ______ their traditional skills to the younger generation.",["passed down","came back","looked around","found out"],"Pass down: truyền lại (cho thế hệ sau)."],
+["E","“Could you help me carry this box, please?” – “______”",["Sure, no problem.","No, I don’t.","You’re welcome.","It doesn’t matter."],"Đáp lại lời nhờ giúp đỡ: Sure, no problem."]],
+"unit-2":[
+["V","The streets are very ______ during rush hour, so it takes ages to get home.",["congested","peaceful","empty","quiet"],"Congested: tắc nghẽn."],
+["V","Cities with good public transport usually have a high ______ of life.",["quality","quantity","price","number"],"Quality of life: chất lượng cuộc sống."],
+["P","Chọn từ có phần gạch chân phát âm khác:",["kn<u>ow</u>","t<u>ow</u>n","cr<u>ow</u>d","h<u>ou</u>se"],"Know đọc /əʊ/; các từ còn lại đọc /aʊ/."],
+["P","Chọn từ có phần gạch chân phát âm khác:",["h<u>ere</u>","th<u>ere</u>","ch<u>air</u>","f<u>air</u>"],"Here đọc /ɪə/; các từ còn lại đọc /eə/."],
+["G","The bigger the city is, ______ the traffic becomes.",["the worse","worse","the worst","the bad"],"So sánh kép: The + so sánh hơn ..., the + so sánh hơn ..."],
+["G","Our city is getting ______.",["more and more crowded","crowded and crowded","the more crowded","most crowded"],"More and more + tính từ dài: ngày càng ..."],
+["G","It’s hard to ______ the city without a motorbike.",["get around","give up","take off","turn off"],"Get around: đi lại, di chuyển quanh."],
+["E","“Let me carry your bags for you.” – “______”",["Thanks, that’s very kind of you.","Yes, you can’t.","No, I can’t.","Never mind."],"Đáp lại lời đề nghị giúp đỡ một cách lịch sự."]],
+"unit-3":[
+["V","I write a ______ list every evening so I don’t forget my homework.",["to-do","to-go","to-be","to-make"],"To-do list: danh sách việc cần làm."],
+["V","Too much homework can cause ______ for students.",["stress","fun","energy","relaxation"],"Stress: căng thẳng."],
+["V","A ______ life means you have time for study, sport and rest.",["well-balanced","well-known","well-paid","well-dressed"],"Well-balanced: cân bằng."],
+["P","Từ nào có chữ h KHÔNG được phát âm /h/?",["hour","house","help","happy"],"Hour đọc /ˈaʊə/, chữ h câm."],
+["P","Từ nào bắt đầu bằng âm /r/?",["wrong","honest","whole","knife"],"Wrong đọc /rɒŋ/, chữ w câm."],
+["G","If you want to stay healthy, you ______ eat more vegetables.",["should","mustn’t","can’t","needn’t"],"Should dùng để khuyên trong câu điều kiện loại 1."],
+["G","If you don’t finish your project today, you ______ be able to hand it in on time.",["may not","mustn’t","shouldn’t","won’t to"],"May not diễn tả khả năng không xảy ra."],
+["E","“Sorry, could you say that again, please?” is used to ______.",["ask for repetition","say thank you","offer help","give advice"],"Câu này dùng để đề nghị nhắc lại."]],
+"unit-4":[
+["V","It’s important to ______ traditional values for future generations.",["preserve","forget","damage","ignore"],"Preserve: gìn giữ, bảo tồn."],
+["V","In the past, children often played ______ games like tug of war.",["folk","online","video","computer"],"Folk games: trò chơi dân gian."],
+["V","A ______ is a building or statue of historical importance.",["monument","market","garage","factory"],"Monument: di tích, tượng đài."],
+["P","Từ nào có chữ l câm (không phát âm)?",["walk","milk","lamp","film"],"Walk đọc /wɔːk/."],
+["P","Từ nào có chữ b câm, kết thúc bằng âm /m/?",["comb","table","number","rubber"],"Comb đọc /kəʊm/."],
+["G","At 8 p.m. yesterday, my grandmother ______ me a folk tale.",["was telling","told","is telling","has told"],"Quá khứ tiếp diễn: hành động đang diễn ra tại một thời điểm trong quá khứ."],
+["G","I wish I ______ more about the history of my hometown.",["knew","know","will know","am knowing"],"Wish + quá khứ đơn: ước điều trái với hiện tại."],
+["E","“Thank you for helping me with my project.” – “______”",["It’s my pleasure.","Yes, please.","I’m afraid not.","Same to you."],"Đáp lại lời cảm ơn."]],
+"unit-5":[
+["V","The summer camp was so ______ that I want to go again next year.",["memorable","boring","awful","terrible"],"Memorable: đáng nhớ."],
+["V","Climbing the mountain was a ______ experience; I was really scared.",["terrifying","relaxing","peaceful","delicious"],"Terrifying: đáng sợ."],
+["V","I felt ______ when I forgot my lines in front of the whole school.",["embarrassed","excited","relaxed","proud"],"Embarrassed: xấu hổ, ngượng."],
+["P","Từ nào bắt đầu bằng âm /j/?",["year","joke","eye","hour"],"Year đọc /jɪə/."],
+["P","Từ nào bắt đầu bằng âm /w/?",["one","own","write","honest"],"One đọc /wʌn/."],
+["G","I ______ to Da Lat three times so far.",["have been","was","am","go"],"Hiện tại hoàn thành với số lần và so far."],
+["G","Have you ever ______ in a hot-air balloon?",["ridden","rode","ride","riding"],"Have + V3: ride – rode – ridden."],
+["E","“I’m sorry I’m late.” – “______”",["That’s all right.","You’re welcome.","Congratulations!","Me too."],"Đáp lại lời xin lỗi."]],
+"unit-6":[
+["V","In the past, many people lived in ______ families with grandparents, parents and children.",["extended","nuclear","single","tiny"],"Extended family: gia đình nhiều thế hệ."],
+["V","Nowadays, students can use online ______ to study at home.",["resources","lanterns","handicrafts","buffaloes"],"Online resources: tài liệu trực tuyến."],
+["V","Trams are no longer a common means of ______ in Ha Noi.",["transport","communication","entertainment","education"],"Means of transport: phương tiện giao thông."],
+["P","Từ nào bắt đầu bằng cụm âm /fr/?",["friendly","flower","fly","flat"],"Friendly /ˈfrendli/."],
+["P","Từ nào bắt đầu bằng cụm âm /fl/?",["flood","free","fruit","from"],"Flood /flʌd/."],
+["G","My grandfather enjoys ______ about his childhood.",["talking","to talk","talk","talked"],"Enjoy + V-ing."],
+["G","We decided ______ the Museum of Ethnology at the weekend.",["to visit","visiting","visit","visited"],"Decide + to-infinitive."],
+["E","“I promise I’ll call you as soon as I arrive.” – “______”",["OK. Don’t forget!","Never mind.","Same to you.","Congratulations!"],"Đáp lại lời hứa."]],
+"unit-7":[
+["V","Ha Long Bay is famous for its thousands of limestone ______.",["islands","deserts","volcanoes","glaciers"],"Limestone islands: đảo đá vôi."],
+["V","Son Doong is the largest ______ in the world.",["cave","waterfall","desert","river"],"Cave: hang động."],
+["V","Tourists must not ______ the natural beauty of the area.",["damage","protect","admire","explore"],"Damage: làm hư hại."],
+["P","Từ nào bắt đầu bằng cụm âm /sn/?",["snow","slow","sun","sign"],"Snow /snəʊ/."],
+["P","Từ nào bắt đầu bằng cụm âm /sl/?",["sleep","snack","sweet","smile"],"Sleep /sliːp/."],
+["G","“Are you going to Phong Nha?” Lan asked me. → Lan asked me ______.",["if I was going to Phong Nha","if was I going to Phong Nha","whether am I going to Phong Nha","that I was going to Phong Nha"],"Câu hỏi Yes/No gián tiếp: if/whether + S + V (lùi thì)."],
+["G","“Do you like waterfalls?” he asked. → He asked me ______ waterfalls.",["whether I liked","did I like","if do I like","that I liked"],"Whether + S + V lùi thì: do like → liked."],
+["E","“Do you mind if I take a photo here?” – “______”",["Not at all. Go ahead.","Yes, I do. Go ahead.","Thank you.","You’re welcome."],"Not at all = không phiền, đồng ý cho phép."]],
+"unit-8":[
+["V","We booked a package ______ that included flights, hotels and meals.",["tour","tourist","guide","map"],"Package tour: tour trọn gói."],
+["V","Hoi An is a popular tourist ______.",["destination","luggage","passport","souvenir"],"Destination: điểm đến."],
+["V","You need a ______ to travel to another country.",["passport","souvenir","brochure","backpack"],"Passport: hộ chiếu."],
+["P","Chọn từ có trọng âm khác:",["economic","historic","fantastic","romantic"],"Đuôi -ic: trọng âm rơi vào âm tiết ngay trước. Economic nhấn âm 3, các từ còn lại nhấn âm 2."],
+["P","Từ nào nhấn trọng âm vào âm tiết thứ hai?",["delicious","various","serious","curious"],"Đuôi -ious: trọng âm trước đuôi. de-LI-cious."],
+["G","The tour guide ______ showed us around was very friendly.",["who","which","whose","where"],"Who thay cho người."],
+["G","This is the hotel ______ we stayed in last summer.",["which","who","whose","what"],"Which thay cho vật."],
+["E","Visitors ______ show their tickets at the entrance.",["must","mustn’t","needn’t","might"],"Must: diễn tả sự bắt buộc."]],
+"unit-9":[
+["V","People in the UK speak English as their ______ language.",["first","second","foreign","sign"],"First language: tiếng mẹ đẻ."],
+["V","Words like “karaoke” and “tsunami” are ______ words in English.",["borrowed","native","lost","long"],"Borrowed words: từ vay mượn."],
+["V","You can ______ a new word in a dictionary.",["look up","take off","turn on","give up"],"Look up: tra cứu."],
+["P","Trọng âm của “nationality” rơi vào âm tiết nào?",["-al-","na-","-tion-","-i-"],"Đuôi -ity: trọng âm rơi vào âm tiết ngay trước. na-tion-AL-i-ty."],
+["P","Từ nào nhấn trọng âm vào âm tiết thứ hai?",["ability","quality","station","nation"],"a-BIL-i-ty."],
+["G","The teacher ______ teaches us English comes from Singapore.",["who","which","whose","where"],"Mệnh đề quan hệ xác định, who thay cho người."],
+["G","I have a friend ______ mother tongue is Spanish.",["whose","who","which","whom"],"Whose + danh từ: chỉ sở hữu."],
+["E","“I’m taking my English speaking test tomorrow.” – “______”",["Good luck!","Congratulations!","Never mind.","Same to you."],"Chúc may mắn trước kỳ thi."]],
+"unit-10":[
+["V","A ______ is the natural home of an animal or plant.",["habitat","continent","planet","zoo"],"Habitat: môi trường sống."],
+["V","The plants and animals of a particular area are called ______.",["flora and fauna","land and sea","sun and moon","rich and poor"],"Flora and fauna: hệ thực vật và động vật."],
+["V","Many species are in danger of ______ because of hunting.",["extinction","education","exhibition","exploration"],"Extinction: sự tuyệt chủng."],
+["P","Trong câu “We should protect the forests”, những từ nào thường được nhấn?",["protect, forests","We, the","should, the","We, should"],"Nhịp câu: nhấn vào từ mang nghĩa (động từ chính, danh từ)."],
+["P","Loại từ nào thường KHÔNG được nhấn trong câu?",["Từ chức năng (a, the, to, of)","Danh từ","Động từ chính","Tính từ"],"Từ chức năng thường đọc lướt, không nhấn."],
+["G","The Mekong, ______ flows through six countries, is very important to farmers.",["which","that","who","where"],"Mệnh đề không xác định (có dấu phẩy) không dùng that."],
+["G","Mr Nam, ______ works at the national park, protects rare animals.",["who","which","that","whose"],"Who thay cho người, có dấu phẩy nên không dùng that."],
+["E","“Come on! Why don’t you join our clean-up campaign?” is used to ______.",["persuade someone to do something","apologise","give directions","ask for repetition"],"Thuyết phục ai đó làm gì."]],
+"unit-11":[
+["V","A ______ is a small device you wear on your wrist to check the time and your heart rate.",["smartwatch","e-reader","laptop","speaker"],"Smartwatch: đồng hồ thông minh."],
+["V","I use an ______ to read books without carrying heavy paper copies.",["e-reader","headphone","printer","camera"],"E-reader: máy đọc sách."],
+["V","Robot vacuum cleaners can clean the floor ______, without human help.",["automatically","slowly","carefully","noisily"],"Automatically: tự động."],
+["P","Trong câu “I bought a new laptop yesterday”, từ nào thường KHÔNG được nhấn?",["a","bought","laptop","yesterday"],"Mạo từ là từ chức năng, đọc lướt."],
+["P","Trong câu “She’s using her tablet at home”, từ nào thường KHÔNG được nhấn?",["at","using","tablet","home"],"Giới từ là từ chức năng, đọc lướt."],
+["G","My teacher suggested ______ a dictionary app.",["using","to use","use","used"],"Suggest + V-ing."],
+["G","The doctor recommended that I ______ spend less time on screens.",["should","would","must to","ought"],"Recommend + that + S + should + V."],
+["E","“Do you understand what I mean?” is used to ______.",["check understanding","ask for permission","thank someone","apologise"],"Kiểm tra xem người nghe đã hiểu chưa."]],
+"unit-12":[
+["V","An ______ designs buildings.",["architect","mechanic","surgeon","plumber"],"Architect: kiến trúc sư."],
+["V","This job is very ______; I often work long hours and feel stressed.",["demanding","relaxing","boring","easy"],"Demanding: đòi hỏi cao, vất vả."],
+["V","Working as a vet is ______ because you help sick animals get better.",["rewarding","dull","repetitive","unpaid"],"Rewarding: đáng làm, mang lại sự hài lòng."],
+["P","Khi nói “You want to be a doctor?” như một câu hỏi, giọng ở cuối câu thường ______.",["lên giọng","xuống giọng","đi ngang","ngắt hẳn"],"Câu trần thuật dùng như câu hỏi: lên giọng ở cuối."],
+["P","“You’ve sent your application?” (lên giọng ở cuối) có chức năng là ______.",["câu hỏi","câu mệnh lệnh","câu cảm thán","lời chào"],"Ngữ điệu lên biến câu trần thuật thành câu hỏi."],
+["G","______ the job is hard, she really enjoys it.",["Although","Because","So","Since"],"Although: mệnh đề chỉ sự nhượng bộ."],
+["G","He was ______ tired ______ he couldn’t finish the report.",["so … that","such … that","too … to","because … so"],"So + adj + that: quá ... đến nỗi (chỉ kết quả)."],
+["G","She chose to become a nurse ______ she likes helping people.",["because","although","so","even though"],"Because: mệnh đề chỉ lý do."]]
+};
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function questionsFor(it){
+  if(!it.r)return shuffle(QUIZ[it.id]);
+  const n=+it.id.split("-")[1];
+  return shuffle([1,2,3].flatMap(k=>QUIZ["unit-"+((n-1)*3+k)])).slice(0,12);
+}
+let qz=null;
+function showLessons(){
+  $("#lessons").hidden=false;$("#practice").hidden=false;$("#quiz").hidden=true;
+  $("#startQuiz").textContent="Làm bài luyện tập ("+(current.r?12:QUIZ[current.id].length)+" câu)";
+}
+function startQuiz(){
+  qz={list:questionsFor(current),i:0,score:0};
+  $("#lessons").hidden=true;$("#practice").hidden=true;$("#quiz").hidden=false;
+  renderQ();
+}
+function renderQ(){
+  const box=$("#quiz"),total=qz.list.length,q=qz.list[qz.i];
+  if(!q){
+    const r=qz.score/total;
+    const msg=r===1?"Xuất sắc! Cả lớp trả lời đúng tất cả.":r>=.75?"Rất tốt! Chỉ cần xem lại vài câu.":r>=.5?"Khá! Hãy ôn lại phần còn sai.":"Cần ôn tập thêm. Làm lại để củng cố nhé.";
+    box.innerHTML=`<div class="qend"><p>Kết quả</p><p class="qbig">${qz.score}/${total}</p><p>${msg}</p><div class="qnav"><button class="open" id="qAgain">Làm lại</button><button class="btn" id="qBack">Về danh sách tiết</button></div></div>`;
+    $("#qAgain").onclick=startQuiz;$("#qBack").onclick=showLessons;$("#qAgain").focus();return;
+  }
+  const [tag,text,opts,ex]=q;
+  const order=shuffle(opts.map((o,i)=>({o,ok:i===0})));
+  box.innerHTML=`<div class="qhead"><span>Câu ${qz.i+1}/${total}</span><span class="qtag">${TAGS[tag]}</span><span>Đúng: ${qz.score}</span></div>
+  <p class="qtext">${text}</p>
+  <div class="qopts">${order.map((x,i)=>`<button class="qopt" data-ok="${x.ok}"><b>${"ABCD"[i]}</b><span>${x.o}</span></button>`).join("")}</div>
+  <p class="qex" hidden></p>
+  <div class="qnav"><button class="btn" id="qQuit">Về danh sách tiết</button><button class="open" id="qNext" hidden>${qz.i+1<total?"Câu tiếp theo":"Xem kết quả"}</button></div>`;
+  const btns=box.querySelectorAll(".qopt");
+  btns.forEach(b=>b.addEventListener("click",()=>{
+    const ok=b.dataset.ok==="true";
+    btns.forEach(x=>{x.disabled=true;if(x.dataset.ok==="true")x.classList.add("right")});
+    if(ok)qz.score++;else b.classList.add("wrong");
+    const e=box.querySelector(".qex");e.hidden=false;e.innerHTML=(ok?"<b>✔ Chính xác!</b> ":"<b>✘ Chưa đúng.</b> ")+ex;
+    box.querySelector(".qhead span:last-child").textContent="Đúng: "+qz.score;
+    const n=$("#qNext");n.hidden=false;n.focus();
+  }));
+  $("#qNext").onclick=()=>{qz.i++;renderQ()};
+  $("#qQuit").onclick=showLessons;
+}
+$("#startQuiz").addEventListener("click",startQuiz);
+
+function route(){
+  const id=location.hash.slice(1);
+  const it=ITEMS.find(i=>i.id===id);
+  if(it){if(it.s!==sem)setSem(it.s);openPanel(it)}
+  else if($("#panel").open)$("#panel").close();
+}
+function setSem(s){sem=s;document.querySelectorAll(".sem button").forEach(b=>b.setAttribute("aria-selected",String(+b.dataset.sem===s)));renderUnits()}
+
+document.querySelectorAll(".sem button").forEach(b=>b.addEventListener("click",()=>setSem(+b.dataset.sem)));
+$("#closeBtn").addEventListener("click",()=>$("#panel").close());
+$("#panel").addEventListener("click",e=>{if(e.target===e.currentTarget)e.currentTarget.close()});
+$("#panel").addEventListener("close",()=>{if(location.hash)history.replaceState(null,"",location.pathname+location.search)});
+window.addEventListener("hashchange",route);
+
+/* Teacher info */
+document.querySelectorAll("[data-key]").forEach(el=>{
+  el.textContent=store.info[el.dataset.key]||"";
+  el.addEventListener("input",()=>{store.info[el.dataset.key]=el.textContent.trim();save()});
+  el.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();el.blur()}});
+});
+
+/* Edit mode */
+$("#editBtn").addEventListener("click",()=>{
+  const on=!document.body.classList.contains("editing");
+  document.body.classList.toggle("editing",on);
+  $("#editBtn").classList.toggle("on",on);
+  $("#editBtn").setAttribute("aria-pressed",String(on));
+  $("#editBtn").textContent=on?"Xong, ẩn ô nhập":"Gắn liên kết bài giảng";
+  document.querySelectorAll("[data-key]").forEach(el=>el.contentEditable=String(on));
+  $("#hint").textContent=on?"Mở từng Unit và dán liên kết vào ô bên dưới mỗi tiết. Liên kết được lưu trên trình duyệt này.":"Bấm vào một Unit để mở danh sách tiết dạy.";
+});
+
+/* Backup */
+function refreshBackup(){$("#backupBox").value=JSON.stringify(store)}
+$("#copyBtn").addEventListener("click",async()=>{
+  const t=$("#backupBox");t.select();
+  try{await navigator.clipboard.writeText(t.value);toast("Đã sao chép mã")}catch(e){try{document.execCommand("copy");toast("Đã sao chép mã")}catch(_){toast("Hãy bôi đen rồi nhấn Ctrl+C")}}
+});
+$("#restoreBtn").addEventListener("click",()=>{
+  try{const d=JSON.parse($("#backupBox").value);if(!d||typeof d.links!=="object")throw 0;
+    store={links:d.links||{},info:d.info||{}};save();
+    document.querySelectorAll("[data-key]").forEach(el=>el.textContent=store.info[el.dataset.key]||"");
+    renderUnits();toast("Đã khôi phục liên kết")}
+  catch(e){toast("Mã không hợp lệ – hãy dán đúng đoạn mã đã sao chép")}
+});
+
+/* Fullscreen */
+$("#fsBtn").addEventListener("click",()=>{
+  if(document.fullscreenElement)document.exitFullscreen();
+  else if(document.documentElement.requestFullscreen)document.documentElement.requestFullscreen().catch(()=>toast("Trình duyệt không cho phép – nhấn F11"));
+  else toast("Nhấn F11 để vào toàn màn hình");
+});
+
+let tt;function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(tt);tt=setTimeout(()=>t.classList.remove("show"),2200)}
+
+refreshBackup();renderUnits();route();
+</script>
+</body>
+</html>
