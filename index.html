@@ -146,6 +146,8 @@ body.editing .backup{display:block}
 .say{cursor:pointer;border-radius:6px;padding:0 2px}
 .say::after{content:" 🔊";font-size:.65em;opacity:.8}
 .say:hover{background:rgba(255,255,255,.12)}
+.sgk .qa li::before{content:none}
+.sgkp{display:inline-block;background:var(--yellow);color:#2A2210;font-weight:700;border-radius:999px;padding:4px 14px;margin-bottom:10px;font-size:1rem}
 .focus{margin:10px 0 0;color:var(--chalk);font-size:.95rem;line-height:1.45}
 .focus b{color:var(--yellow);font-weight:600}
 .practice{margin:0 16px 20px;padding:16px 18px;border-radius:14px;background:color-mix(in srgb,var(--c) 10%,var(--bg));display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
@@ -591,6 +593,62 @@ const SLIDES={
 {h:"Homework",items:["Hoàn thiện bài dự án theo nhóm.","Ôn từ vựng và ngữ pháp Unit 1.","Chuẩn bị Unit 2: City Life, phần Getting Started."]}
 ]
 };
+/* ===== Bài tập SGK: chèn vào đúng vị trí trong từng tiết ===== */
+const B=(n,p,sub,o)=>Object.assign({sgk:1,h:"Bài "+n+" (trang "+p+")",sub},o);
+const C=a=>a.map((x,i)=>["Câu "+(i+1),x]);
+const SAY=w=>"<span class='say'>"+w+"</span>";
+const SGK_ADD={
+"unit-1:0":[["Listen and read",[
+  B(2,9,"Đọc lại hội thoại, điền không quá hai từ",{qa:C(["last month","fewer people","craft village","neighbours","useful advice"])}),
+  B(3,9,"Nối từ với định nghĩa",{qa:[["1. suburb","d"],["2. facilities","e"],["3. community","a"],["4. get on with","c"],["5. remind sb of","b"]]}),
+  B(4,9,"Hoàn thành câu với từ ở bài 3",{qa:C(["suburb","get on with","facilities","remind … of","community"])}),
+  B(5,9,"Quiz: What is the place?",{qa:C(["stadium","hospital / medical centre","park / playground","school","museum"]),note:"Hỏi thêm: What are some other places in a neighbourhood you know? (library, post office, market, cinema…)"})
+]]],
+"unit-1:1":[["Local products & places",[
+  B(1,10,"Nối người phục vụ cộng đồng với công việc",{qa:[["1. police officer","c"],["2. garbage collector","e"],["3. electrician","a"],["4. firefighter","b"],["5. delivery person","d"]],note:"Hỏi thêm: What other community helpers can you add? (doctor, nurse, postman, bus driver, street sweeper…)"}),
+  B(2,10,"Viết từ dưới đúng tranh",{qa:[["Tranh 1","tourist attraction"],["Tranh 2","pottery"],["Tranh 3","artisan"],["Tranh 4","speciality food"],["Tranh 5","handicraft"]]}),
+  B(3,10,"Điền từ trong khung",{qa:C(["artisans","electrician","speciality food","garbage collector","handicrafts"])})
+]],["Listen and repeat",[
+  B(4,10,"Nghe Track 2, đánh số các từ theo thứ tự nghe được, rồi nghe lại và nhắc theo. Bấm 🔊 để nghe từng từ.",{qa:[[SAY("pack"),"/æ/"],[SAY("park"),"/ɑː/"],[SAY("kettle"),"/e/"],[SAY("cattle"),"/æ/"],[SAY("marry"),"/æ/"],[SAY("merry"),"/e/"],[SAY("chart"),"/ɑː/"],[SAY("chat"),"/æ/"]],note:"Đáp án hiện ra là âm của từng từ. Thứ tự đánh số cô chữa theo bài nghe Track 2."}),
+  B(5,10,"Gạch chân /æ/, khoanh tròn /ɑː/, đánh dấu ✓ /e/",{qa:[["Câu 1: "+SAY("Thanks")+", "+SAY("garbage"),"Thanks /æ/ gạch chân; garbage /ɑː/ khoanh tròn"],["Câu 2: "+SAY("grandmother")+", "+SAY("artist"),"grandmother /æ/ gạch chân; artist /ɑː/ khoanh tròn"],["Câu 3: "+SAY("best")+", "+SAY("bread"),"best /e/ ✓; bread /e/ ✓"],["Câu 4: "+SAY("bamboo")+", "+SAY("beds"),"bamboo /æ/ gạch chân; beds /e/ ✓"],["Câu 5: "+SAY("park")+", "+SAY("relax"),"park /ɑː/ khoanh tròn; relax /æ/ gạch chân"]]})
+]]],
+"unit-1:2":[["Question words + to-infinitive",[
+  B(1,11,"Điền từ để hỏi phù hợp",{qa:C(["how","where","what","when","who"])}),
+  B(2,11,"Viết lại câu dùng question word + to V",{qa:C(["I don’t know how to get to the swimming pool.","They are wondering where to buy traditional handicrafts.","She asked what to give to her new neighbour at his house-warming party.","I can’t decide who to ask for advice.","Could you tell me when to pay the water bill?"])})
+]],["Phrasal verbs (1)",[
+  B(3,12,"Nối cụm động từ với nghĩa",{qa:[["1. look around","b"],["2. come back","d"],["3. hand down","e"],["4. find out","c"],["5. take care of","a"]]}),
+  B(4,12,"Chia đúng dạng cụm động từ ở bài 3",{qa:C(["came back","hand down","find out","takes care of","looking around"])}),
+  B(5,12,"Game: Find someone who…",{items:["Mỗi em hỏi càng nhiều bạn càng tốt 5 câu hỏi trong bảng SGK.","Bạn nào trả lời “Yes” thì ghi tên vào bảng.","Hết giờ, báo cáo trước lớp. Ví dụ: Nam takes care of his younger sister."]})
+]]],
+"unit-1:3":[["Practice: How do you respond?",[
+  B(2,12,"Làm việc theo cặp: nhờ giúp đỡ và đáp lại (câu gợi ý)",{qa:[["Tình huống 1: mượn bút của bạn","Could you lend me your pen, please? – Sure. Here you are."],["Tình huống 2: hỏi tên người thu gom rác mới","Could you tell me the name of the new garbage collector? – Of course. It’s Mr …"],["Tình huống 3: hỏi chỗ mua rau quả ngon nhất","Could you tell me where to buy the best fruits and vegetables? – Sure. You can go to …"]]})
+]],["Role-play",[
+  B(3,12,"Places of interest: em có biết địa điểm trong tranh?",{qa:[["Tranh a","Nguyen Hue Pedestrian Street (Ho Chi Minh City, Viet Nam)"],["Tranh b","Sydney Opera House (Sydney, Australia)"]]})
+]],["Listen: Places of interest",[
+  B(4,13,"Chữa bài: nghe lại Track 5 và điền bảng",{items:["(1) Khoảng cách từ nhà Bình đến phố đi bộ Nguyễn Huệ (km)","(2) Bình đến đó bao lâu một lần (Every …)","(3) Trẻ em đến đó để nghe nhạc và tìm …","(4) Khoảng cách từ nhà Mira đến Nhà hát Opera (km)","(5) Trẻ em chạy lên xuống cầu thang và … hải âu","(6) Bố mẹ … và trò chuyện"],audio:[[5,"Bài 4: nghe lại để chữa"]],note:"Đáp án bài nghe cô đối chiếu sách giáo viên."})
+]]],
+"unit-1:4":[["Warm-up: Where is it from?",[
+  B(1,13,"Làm việc theo cặp: em thấy gì trong tranh? Ở đâu làm ra?",{qa:[["Tranh a","Cốm (young sticky rice flakes): làng Vòng, Hà Nội"],["Tranh b","Pottery (đồ gốm): ví dụ Bát Tràng (Hà Nội), Denby (Anh)"]]})
+]],["Read the brochure",[
+  B(2,14,"Nối từ được tô màu với định nghĩa",{qa:[["1. preserve","b"],["2. shorten","c"],["3. fragrance","e"],["4. original","a"],["5. function","d"]]}),
+  B(3,14,"Chi tiết nào thuộc về Vong, chi tiết nào thuộc về Denby?",{qa:C(["Denby (làm từ đất sét địa phương)","Vong (làm từ lúa nếp non)","Cả Vong và Denby","Denby (nổi tiếng thế giới)","Vong (đặc sản mùa thu Hà Nội)"])})
+]],["More reading: Nem nướng Ninh Hoa",[
+  B(4,14,"Làm việc theo cặp: hỏi đáp về một đặc sản quê em",{items:["Đó là đặc sản gì?","Làm từ nguyên liệu gì?","Có làm theo cách truyền thống không?","Dùng để làm gì?","Nổi tiếng trong nước hay cả thế giới?"],note:"Bài 5: các nhóm dùng câu trả lời để thuyết trình ngắn (slide tiếp theo)."})
+]]],
+"unit-1:5":[["Warm-up: Why are they important?",[
+  B(1,15,"Làm việc theo cặp: ai trong tranh, họ đang làm gì?",{qa:[["Tranh a","A street sweeper / garbage collector. He is sweeping the street and collecting rubbish."],["Tranh b","Garbage collectors. They are emptying rubbish bins into a garbage truck."]]})
+]],["Listening",[
+  B("2, 3",15,"Chữa bài nghe (Track 6, 7)",{items:["Bài 2: điền không quá hai từ: tên cuộc thi, nghề của ông Vinh, ngoại hình, tính cách.","Bài 3: đánh dấu True / False cho 4 câu về ông Vinh.","Nghe lại từng đoạn, dừng sau mỗi thông tin cần tìm."],audio:[[6,"Bài 2"],[7,"Bài 3"]],note:"Đáp án bài nghe cô đối chiếu sách giáo viên."}),
+  B(4,15,"Làm việc theo cặp: chọn một người phục vụ cộng đồng và trả lời",{items:["Công việc của người đó là gì?","Người đó trông như thế nào?","Tính cách người đó ra sao?","Người đó làm gì cho cộng đồng?","Em cảm thấy thế nào về người đó?"],note:"Bài 5: viết đoạn văn khoảng 100 từ, bắt đầu bằng “My favourite community helper is …” (dàn ý ở slide sau)."})
+]]],
+"unit-1:6":[[T1,[
+  B(1,16,"Viết từ phù hợp với mỗi mô tả",{qa:C(["delivery person","firefighter","tourist attraction","pottery","artisan"])}),
+  B(2,16,"Khoanh từ đúng",{qa:C(["preserve","fragrance","police officers","speciality food","handicrafts"])}),
+  B(3,16,"Chọn A, B, C hoặc D",{qa:C(["B. when","C. how","D. where","A. what","C. who"])}),
+  B(4,16,"Viết lại câu với cụm động từ trong ngoặc",{qa:C(["In some villages, people cut down on the number of steps to make the handicraft.","My grandparents handed down the skills to my parents.","In their community, the eldest child usually takes care of his or her parents.","Before we go to a new place, we always find out information about it.","They get on with all neighbours."])})
+]]]
+};
+Object.entries(SGK_ADD).forEach(([k,ins])=>ins.forEach(([anchor,arr])=>{const L=SLIDES[k];const i=L.findIndex(s=>s.h===anchor);L.splice(i<0?L.length-1:i+1,0,...arr)}));
 let dk=null;
 function openDeck(it,i){
   dk={list:SLIDES[it.id+":"+i],n:0};
@@ -599,7 +657,7 @@ function openDeck(it,i){
 }
 function renderSlide(){
   const s=dk.list[dk.n],st=$("#dkStage");
-  let h=`<div class="sl${s.big?" big":""}"><h2>${s.h}</h2>`;
+  let h=`<div class="sl${s.big?" big":""}${s.sgk?" sgk":""}">${s.sgk?'<span class="sgkp">📖 Bài tập SGK</span>':""}<h2>${s.h}</h2>`;
   if(s.sub)h+=`<p class="ssub">${s.words?s.sub.replace("để xem nghĩa","để nghe phát âm và xem nghĩa"):s.sub}</p>`;
   if(s.form)h+=`<div class="form">${s.form}</div>`;
   if(s.text)h+=`<p class="stext">${s.text}</p>`;
