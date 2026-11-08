@@ -139,6 +139,7 @@ body.editing .backup{display:block}
 .aud label{background:rgba(255,255,255,.14);padding:6px 12px;border-radius:8px;cursor:pointer;color:var(--chalk);position:relative}
 .aud label:focus-within{outline:3px solid var(--yellow)}
 .aud input{position:absolute;opacity:0;width:1px;height:1px;overflow:hidden}
+.audtag{display:inline-block;margin-left:6px;padding:0 8px;border-radius:999px;background:color-mix(in srgb,var(--c) 16%,transparent);color:var(--ink);font-size:.85rem}
 .focus{margin:10px 0 0;color:var(--chalk);font-size:.95rem;line-height:1.45}
 .focus b{color:var(--yellow);font-weight:600}
 .practice{margin:0 16px 20px;padding:16px 18px;border-radius:14px;background:color-mix(in srgb,var(--c) 10%,var(--bg));display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
@@ -310,10 +311,10 @@ function openPanel(it){
   $("#pFocus").innerHTML=focusOf(it);
   const ol=$("#lessons");ol.innerHTML="";
   lessonsOf(it).forEach(([en,vi],i)=>{
-    const k=it.id+":"+i,url=store.links[k]||"";
+    const k=it.id+":"+i,url=store.links[k]||"",aud=(SLIDES[k]||[]).filter(s=>s.audio).flatMap(s=>s.audio.map(a=>a[0]));
     const li=document.createElement("li");li.className="lesson";
     li.innerHTML=`<span class="n" aria-hidden="true"></span>
-      <span class="name">${en}<small>${vi}</small></span>
+      <span class="name">${en}<small>${vi}${aud.length?` <span class="audtag">🎧 Có bài nghe: Track ${aud.join(", ")}</span>`:""}</small></span>
       <span class="acts"><button class="open show" hidden>Trình chiếu</button><a class="open" target="_blank" rel="noopener"></a></span>
       <input type="url" placeholder="Dán liên kết bài giảng (Google Slides, Canva, YouTube…)" aria-label="Liên kết cho ${en}">`;
     const a=li.querySelector("a.open"),inp=li.querySelector("input");
@@ -632,9 +633,11 @@ function wireAudio(st){
     inp.addEventListener("change",async()=>{const f=inp.files[0];if(!f)return;useBlob(f);const ok=await audSet("track-"+n,f);toast(ok?"Đã lưu file nghe Track "+n+" trên máy này":"Đã mở file, nhưng trình duyệt không cho lưu lại")});
     const saved=await audGet("track-"+n);
     if(saved){useBlob(saved);return}
-    au.addEventListener("error",()=>{if(!au.src.startsWith("blob:"))msg.textContent="Chưa tìm thấy file audio/"+pad(n)+".mp3. Bấm “Chọn file trên máy” để thêm."},{once:true});
-    au.addEventListener("loadedmetadata",()=>{if(!au.src.startsWith("blob:"))msg.textContent="File audio/"+pad(n)+".mp3"},{once:true});
-    au.src="audio/"+pad(n)+".mp3";msg.textContent="Đang tìm file audio/"+pad(n)+".mp3…";
+    const cands=[pad(n)+".mp3","audio/"+pad(n)+".mp3"];let ci=0;
+    const tryNext=()=>{if(au.src.startsWith("blob:"))return;if(ci>=cands.length){msg.textContent="Chưa tìm thấy file "+pad(n)+".mp3. Bấm “Chọn file trên máy” để thêm.";return}au.src=cands[ci++]};
+    au.addEventListener("error",tryNext);
+    au.addEventListener("loadedmetadata",()=>{if(!au.src.startsWith("blob:"))msg.textContent="File nghe "+pad(n)+".mp3"},{once:true});
+    msg.textContent="Đang tìm file "+pad(n)+".mp3…";tryNext();
   });
 }
 $("#deck").addEventListener("keydown",e=>{
